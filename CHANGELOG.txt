@@ -1,0 +1,12 @@
+CHANGELOG
+
+v 0.1 alpha
+- Prima versione alpha
+
+v 0.2 alpha
+- Inserimento modalita'  di archiviazione stand-alone
+
+v 0.3 alpha 
+- Richiesta di inserimento nome utente Amazon per indirizzare correttamente alla distribuzione Tesseract in modo da poterlo utilizzare su ogni computer
+- Inserito collegamento alla distribuzione di Tesseract nel caso non sia trovato installato nel PC
+- Installazione automatica di pytesseract se non installata

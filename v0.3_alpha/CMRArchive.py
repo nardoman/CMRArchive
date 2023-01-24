@@ -103,40 +103,47 @@ def ocr(folder):
 
     print (f"\nTrovati {totalFile} file(s), inizio la scansione OCR...")
 
-    index = 1
+    index = 0 # serve a nominare i file con numeri sequenziali che non hanno il VRID
     
     for el in os.listdir(folder):                              #per ogni file in cartella
         
         if not os.path.isdir(f"{folder}/{el}") :               #se è un file
-
+            
             im = Image.open(f"{folder}/{el}")                  #aprilo come immagine
-              
+            
             VRID = pt.image_to_string(im)                      #uso pytesseract per estrarre il testo
-            print (VRID)
+            
             if not VRID.find("Dock/Trailer")+1:  #necessario perchè spesso è la prima lettera, quindi restituisce 0
                 
                 VRID = VRID[VRID.find("VRID"):VRID.find("VRID")+18]    #Trovo il VRID ed estraggo una sottostringa
-                VRID = VRID[VRID.find("1"):VRID.find("1")+8]           #Incontro il primo 1 e da li estraggo il VRID
-
+                VRID = VRID[VRID.find("1"):VRID.find("1")+8].strip()   #Incontro il primo 1 e da li estraggo il VRID
+                
                 totalSize += os.path.getsize(f"{folder}\{el}")     #Aggiungo il peso in bytes al totale
                 totalCMR += 1                                      #Aggiungo 1 al numero di file elaborati
-
+                print (VRID)
 
                 if VRID == "":
                    VRID = str(index + 1)
+                   index += 1
 
                 os.rename(f"{folder}\{el}", f"{folder}\{VRID}.png") #rinomino il file con il VRID
                                     
                 if verifica (VRID, dizVRID):
+                    
                     if os.path.exists(f"{folder}\{dizVRID[VRID][0]}\{dizVRID[VRID][1]}\{dizVRID[VRID][2]}"):
+                        
                        pass
+                    
                     else:
+                        
                        os.makedirs(f"{folder}\{dizVRID[VRID][0]}\{dizVRID[VRID][1]}\{dizVRID[VRID][2]}")
                        
                     shutil.move(f"{folder}\{VRID}.png", f"{folder}\{dizVRID[VRID][0]}\{dizVRID[VRID][1]}\{dizVRID[VRID][2]}")
 
                 else:
+                    
                     if os.path.exists(f"{folder}\DA VERIFICARE"):
+                        
                        pass
                     else:
                        os.makedirs(f"{folder}\DA VERIFICARE")
@@ -165,7 +172,7 @@ def org(folder):
         if not os.path.isdir(f"{folder}/{el}") : #se è un file
   
             VRID = el[:-4]                       #trovo il VRID eliminando l'estensione
-            print (VRID)
+            #print (VRID)
 
             if verifica (VRID, dizVRID):
                 if os.path.exists(f"{folder}\{dizVRID[VRID][0]}\{dizVRID[VRID][1]}\{dizVRID[VRID][2]}"):
@@ -177,7 +184,9 @@ def org(folder):
 
             else:
                 if os.path.exists(f"{folder}\DA VERIFICARE"):
+                    
                    pass
+                
                 else:
                    os.makedirs(f"{folder}\DA VERIFICARE")
                 
